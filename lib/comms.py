@@ -16,7 +16,7 @@ class StealthConn(object):
     def __init__(self, conn, client=False, server=False, verbose=False):
         self.conn = conn
         self.block_size = 16
-        self.botsecret = "Security is fun’da’mental".encode()
+        self.botsecret = "Security is fun'da'mental".encode()
         self.key = None
         self.cipher = None
         self.client = client
