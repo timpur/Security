@@ -1,4 +1,9 @@
 import os
+import struct
+
+from Crypto.Signature import PKCS1_v1_5
+from Crypto.Hash import SHA256
+from Crypto.PublicKey import RSA
 
 # Instead of storing files on disk,
 # we'll save them in memory for simplicity
@@ -34,11 +39,19 @@ def verify_file(f):
     # Verify the file was sent by the bot master
     # TODO: For Part 2, you'll use public key crypto here
     # Naive verification by ensuring the first line has the "passkey"
-    lines = f.split(bytes("\n", "ascii"), 1)
-    first_line = lines[0]
-    if first_line == bytes("Caesar", "ascii"):
-        return True
-    return False
+    
+    length = struct.unpack('H', f[:2])[0]
+    signature = f[2:length + 2]
+    
+    f = f[length + 2:]
+    
+    hashfile = SHA256.new(f)
+    key = RSA.importKey(open('public.pem').read())
+    verifier = PKCS1_v1_5.new(key)
+    
+    return verifier.verify(hashfile, signature)
+    
+    
 
 def process_file(fn, f):
     if verify_file(f):
