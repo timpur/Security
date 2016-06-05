@@ -1,10 +1,15 @@
 import os
 
+from Crypto.Signature import PKCS1_v1_5
+from Crypto.Hash import SHA256
+from Crypto.PublicKey import RSA
 
 def decrypt_valuables(f):
     # TODO: For Part 2, you'll need to decrypt the contents of this file
     # The existing scheme uploads in plaintext
     # As such, we just convert it back to ASCII and print it out
+    key = RSA.importKey(open('private.pem').read())
+    f = key.decrypt(f)
     decoded_text = str(f, 'ascii')
     print(decoded_text)
 
