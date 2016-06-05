@@ -11,20 +11,27 @@ def sign_file(file):
     # The existing scheme just ensures the updates start with the line 'Caesar'
     # This is naive -- replace it with something better!
 
-    
+    # Generate a hash of the file
     hashfile = SHA256.new(file)
+    # Load the private RSA Key
     key = RSA.importKey(open('private.pem').read())
+    # Create a new signer
     signer = PKCS1_v1_5.new(key)
+    # Sign the file hash
     signature = signer.sign(hashfile)
 
     #Schema
+    # Store the sign lenth at the start of the file
     length = struct.pack('H', len(signature))
+    # Append the length and the signature to the file start
     file = length + signature + file
     
     return file
 
 
 def generagteKey():
+    # To Generate a new RSA key pair
+    
     new_key = RSA.generate(2048) 
     public_key = new_key.publickey().exportKey("PEM") 
     private_key = new_key.exportKey("PEM")

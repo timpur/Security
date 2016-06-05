@@ -8,8 +8,12 @@ def decrypt_valuables(f):
     # TODO: For Part 2, you'll need to decrypt the contents of this file
     # The existing scheme uploads in plaintext
     # As such, we just convert it back to ASCII and print it out
+
+    # Load the private RSA key
     key = RSA.importKey(open('private.pem').read())
+    # Decrypt the file
     f = key.decrypt(f)
+    # Conver the file into ASCII
     decoded_text = str(f, 'ascii')
     print(decoded_text)
 
